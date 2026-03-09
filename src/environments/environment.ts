@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://parkvision-test.online'
+  apiUrl: ''   // Vacío = rutas relativas → el proxy de ng serve redirige a parkvision-test.online
 };

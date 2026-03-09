@@ -1,0 +1,21 @@
+{
+  "/api": {
+    "target": "https://parkvision-test.online",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/connect": {
+    "target": "https://parkvision-test.online",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
+  },
+  "/hubs": {
+    "target": "https://parkvision-test.online",
+    "secure": false,
+    "changeOrigin": true,
+    "ws": true,
+    "logLevel": "debug"
+  }
+}

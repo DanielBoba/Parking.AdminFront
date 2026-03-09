@@ -27,7 +27,7 @@ export class AuthService {
 
   constructor(private http: HttpClient, private router: Router) {}
 
-  login(email: string, password: string):Observable<AuthResponse> {
+  login(email: string, password: string): Observable<any> {
     const body = new URLSearchParams();
     body.set('grant_type', 'password');
     body.set('username', email);
@@ -38,11 +38,10 @@ export class AuthService {
       'Content-Type': 'application/x-www-form-urlencoded'
     });
 
-    return this.http.post<AuthResponse>(`${this.apiUrl}/connect/token`, body.toString(), { headers }).pipe(
+    return this.http.post<any>(`${this.apiUrl}/connect/token`, body.toString(), { headers }).pipe(
       tap(res => {
-        // Enforce SuperAdmin access logic on the frontend side for UX
-        if (res.token) {
-          this.setToken(res.token);
+        if (res.access_token) {
+          this.setToken(res.access_token);
           this.authStatusSubject.next(true);
         }
       }),

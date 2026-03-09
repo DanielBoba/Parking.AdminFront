@@ -12,6 +12,11 @@ export const routes: Routes = [
     canActivate: [authGuard]
   },
   {
+    path: 'dashboard/simulator',
+    loadComponent: () => import('./features/simulator/simulator.component').then(m => m.SimulatorComponent),
+    canActivate: [authGuard]
+  },
+  {
     path: '',
     redirectTo: '/dashboard',
     pathMatch: 'full'

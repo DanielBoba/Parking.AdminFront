@@ -1,14 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { AuthService } from '../../core/auth/auth.service';
 import { TenantService, Tenant } from '../../core/services/tenant.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   template: `
     <div class="min-h-screen bg-dark-bg">
 
@@ -26,7 +26,13 @@ import { TenantService, Tenant } from '../../core/services/tenant.service';
           </div>
         </div>
         <div class="flex items-center gap-4">
-          <span class="text-dark-muted text-sm hidden sm:block">SuperAdministrator</span>
+          <a routerLink="/dashboard/simulator" class="text-sm font-medium text-dark-muted hover:text-white transition-colors flex items-center gap-1">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4"></path>
+            </svg>
+            Simulador
+          </a>
+          <span class="text-dark-muted text-sm hidden sm:block border-l border-dark-border pl-4">SuperAdministrator</span>
           <button (click)="logout()" class="btn-secondary text-sm px-3 py-1.5 flex items-center gap-1">
             <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
