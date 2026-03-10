@@ -1,7 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SimulatorService, SimulationDetectRequest } from '../../core/services/simulator.service';
+import { TenantService, Tenant } from '../../core/services/tenant.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 @Component({
   selector: 'app-simulator',
@@ -10,14 +12,24 @@ import { SimulatorService, SimulationDetectRequest } from '../../core/services/s
   templateUrl: './simulator.component.html',
   styleUrls: ['./simulator.component.css']
 })
-export class SimulatorComponent {
+export class SimulatorComponent implements OnInit {
   simulateForm: FormGroup;
   isSubmitting = false;
   lastSimulationResult: any = null;
   errorMessage: string | null = null;
+  
+  // SuperAdmin Tenant Selection
+  isSuperAdmin = false;
+  tenants: Tenant[] = [];
 
-  constructor(private fb: FormBuilder, private simulatorService: SimulatorService) {
+  constructor(
+    private fb: FormBuilder, 
+    private simulatorService: SimulatorService,
+    private tenantService: TenantService,
+    private authService: AuthService
+  ) {
     this.simulateForm = this.fb.group({
+      targetTenantId: [''],
       plateText: ['', [Validators.required, Validators.minLength(3)]],
       confidence: [0.95, [Validators.required, Validators.min(0), Validators.max(1)]],
       cameraId: ['cam-sim-01', Validators.required],
@@ -25,6 +37,22 @@ export class SimulatorComponent {
       vehicleType: ['Auto', Validators.required],
       includeFrame: [true]
     });
+  }
+
+  ngOnInit() {
+    this.checkSuperAdminAndLoadTenants();
+  }
+
+  checkSuperAdminAndLoadTenants() {
+    const roles = this.authService.getRoles();
+    if (roles.includes('SuperAdministrator')) {
+      this.isSuperAdmin = true;
+      // Fetch tenants so SuperAdmin can choose where to simulate
+      this.tenantService.getAll().subscribe({
+        next: (data) => this.tenants = data,
+        error: (err) => console.error('Failed to load tenants for simulation', err)
+      });
+    }
   }
 
   onSubmit() {

@@ -17,6 +17,24 @@
 
       <form [formGroup]="simulateForm" (ngSubmit)="onSubmit()" class="space-y-4">
         
+        <!-- SuperAdmin Tenant Selector -->
+        <div *ngIf="isSuperAdmin" class="bg-indigo-50 dark:bg-indigo-900/20 rounded-xl p-4 mb-4 border border-indigo-100 dark:border-indigo-800/50">
+            <div class="flex items-center gap-2 mb-2">
+                <svg class="h-4 w-4 text-indigo-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21" />
+                </svg>
+                <span class="text-sm font-semibold text-indigo-900 dark:text-indigo-300">SuperAdmin: Seleccionar Tenant de Destino</span>
+            </div>
+            
+            <select formControlName="targetTenantId" class="w-full h-10 px-3 bg-white dark:bg-gray-700 border border-gray-200 dark:border-gray-600 rounded-lg text-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all outline-none">
+                <option value="">-- Seleccione un Tenant (Opcional) --</option>
+                <option *ngFor="let t of tenants" [value]="t.id">{{ t.displayName }} ({{ t.id }})</option>
+            </select>
+            <p class="text-[11px] text-indigo-600 dark:text-indigo-400 mt-2">
+                La simulación publicará eventos en: <strong>LICENSE_PLATE_QUEUE_&#123;&#123;simulateForm.get('targetTenantId')?.value || 'TENANT_ID'&#125;&#125;</strong>
+            </p>
+        </div>
+
         <!-- Placa -->
         <div>
           <label class="block text-sm font-medium mb-1 dark:text-gray-300">Placa / Matrícula <span class="text-red-500">*</span></label>

@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, tap, catchError, throwError } from 'rxjs';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { jwtDecode } from 'jwt-decode';
 
 export interface AuthResponse {
   id: string;
@@ -60,6 +61,22 @@ export class AuthService {
 
   getToken(): string | null {
     return localStorage.getItem(this.tokenKey);
+  }
+
+  getRoles(): string[] {
+    const token = this.getToken();
+    if (!token) return [];
+    
+    try {
+      const decodedToken: any = jwtDecode(token);
+      let roles = decodedToken['http://schemas.microsoft.com/ws/2008/06/identity/claims/role'] || decodedToken.role;
+      
+      if (!roles) return [];
+      return Array.isArray(roles) ? roles : [roles];
+    } catch(err) {
+      console.error('Invalid token format', err);
+      return [];
+    }
   }
 
   hasToken(): boolean {

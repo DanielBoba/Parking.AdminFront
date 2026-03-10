@@ -10,6 +10,7 @@ export interface SimulationDetectRequest {
   cameraName: string;
   vehicleType: string;
   includeFrame: boolean;
+  targetTenantId?: string;
 }
 
 @Injectable({
