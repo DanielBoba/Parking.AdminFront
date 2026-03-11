@@ -1,0 +1,29 @@
+name: Promote to Production
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  promote:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Merge master into production
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          git checkout production
+          git merge origin/master --ff-only
+          git push origin production
+
+          echo "✅ master merged into production (triggered by tag ${{ github.ref_name }})"
